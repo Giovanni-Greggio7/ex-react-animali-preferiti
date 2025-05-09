@@ -16,8 +16,10 @@
 
             const [animals, setAnimals] = useState([])
             const animalsChoices = ["Cane", "Gatto", "Pappagallo", "Cavallo", "Panda"]
-            const index = Math.floor(Math.random() * animalsChoices.length)
-            const addRandomAnimal = () => setAnimals([...animals, animalsChoices[index]])
+            // const index = Math.floor(Math.random() * animalsChoices.length)
+            // const addRandomAnimal = () => setAnimals([...animals, animalsChoices[index]])
+            const addRandomAnimal = () => setAnimals([...animals, animalsChoices[Math.floor(Math.random() * animalsChoices.length)]])
+            
             
         return (
             <>
