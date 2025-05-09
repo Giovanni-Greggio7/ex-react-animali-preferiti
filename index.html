@@ -11,39 +11,82 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script type="text/babel">
+
         const { useState } = React
+
+        function Modal({
+            title,
+            content,
+            show = false,
+            onConfirm = () => { },
+            onClose = () => { }
+        }) {
+            return show && ReactDOM.createPortal(
+                <div className="modal-container">
+                    <div className="modal">
+                        <h2>{title}</h2>
+                        <p>{content}</p>
+                        <div>
+                            <button onClick={onConfirm}>Conferma</button>
+                            <button onClick={onClose}>Annulla</button>
+                        </div>
+
+                    </div>
+                </div>,
+                document.body
+            )
+        }
+
         const ComponenteReact = () => {
 
             const [animals, setAnimals] = useState([])
-            const animalsChoices = ["Cane", "Gatto", "Pappagallo", "Cavallo", "Panda"]
-            // const index = Math.floor(Math.random() * animalsChoices.length)
-            // const addRandomAnimal = () => setAnimals([...animals, animalsChoices[index]])
-            const addRandomAnimal = () => setAnimals([...animals, animalsChoices[Math.floor(Math.random() * animalsChoices.length)]])
-            
-            
-        return (
-            <>
-                <button onClick={addRandomAnimal}>Aggiungi animale</button >
-                    <details>
-                        <summary>
-                            <strong>Animali</strong>
-                        </summary>
-                        <ul>
-                            {animals.map((element, index) =>
-                                <li key={index}>{element}</li>
-                            )}
-                        </ul>
-                    </details>
-                </>
-            )
-        }
+            const [show, setShow] = useState(false)
+            const [input, setInput] = useState('')
+            const addAnimal = () => {
+                    setAnimals(() => [...animals, input])
+                    setInput('')
+                    setShow(false)
+            }
+
+                // const showModal = setShow(true)
+                // const animalsChoices = ["Cane", "Gatto", "Pappagallo", "Cavallo", "Panda"]
+                // const index = Math.floor(Math.random() * animalsChoices.length)
+                // const addRandomAnimal = () => setAnimals([...animals, animalsChoices[index]])
+                // const addRandomAnimal = () => setAnimals([...animals, animalsChoices[Math.floor(Math.random() * animalsChoices.length)]])
+
+
+                return (
+                    <>
+                        <button onClick={() => setShow(true)}>Aggiungi animale</button>
+                        <details>
+                            <summary>
+                                <strong>Animali</strong>
+                            </summary>
+                            <ul>
+                                {animals.map((element, index) =>
+                                    <li key={index}>{element}</li>
+                                )}
+                            </ul>
+                            <Modal
+                                title='Aggiungi un animale'
+                                content={<input
+                                    type='text'
+                                    value={input}
+                                    onChange={e => setInput(e.target.value)} />}
+                                show={show}
+                                onConfirm={addAnimal}
+                                onClose={() => setShow(false)} />
+                        </details>
+                    </>
+                )
+            }
     </script>
     <script type="text/babel">
-        const { createRoot } = ReactDOM
+            const { createRoot } = ReactDOM
 
-        const listaAnimali = document.querySelector('.lista-animali')
-        const root = createRoot(listaAnimali)
-        root.render(<ComponenteReact />)
+            const listaAnimali = document.querySelector('.lista-animali')
+            const root = createRoot(listaAnimali)
+            root.render(<ComponenteReact />)
     </script>
 </head>
 
